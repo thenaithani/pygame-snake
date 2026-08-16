@@ -1,6 +1,8 @@
 from turtle import Turtle , Screen 
 from snake import Snake
 from time import sleep
+from random import randint
+
 screen = Screen()
 screen.setup(600, 600)
 screen.bgcolor("black")
@@ -8,14 +10,19 @@ screen.bgcolor("black")
 list = []
 
 lisan_al_gaib = Snake()
+lisan_al_gaib.color("green")
 
-
-
+apple = Turtle()
+apple.teleport(randint(-250,250),randint(-250,250))
+apple.shape("circle")
+apple.color("red")
+apple.penup()
 
 list.append(lisan_al_gaib)
-for i in range(40):
+for i in range(3):
     body = Snake()
     list.append(body)
+
 
 
 running = True
@@ -53,7 +60,10 @@ while running:
     leader_position_xcor = lisan_al_gaib.xcor()
     leader_position_ycor = lisan_al_gaib.ycor()
     lisan_al_gaib.fd(20)
-    
+    if lisan_al_gaib.distance(apple) <= 20:
+        apple.teleport(randint(-250,250),randint(-250,250))
+        body = Snake()
+        list.append(body)
     for i in list[1:]:
         positiontempx = i.xcor()
         positiontempy = i.ycor()
@@ -63,6 +73,15 @@ while running:
 
         leader_position_xcor = positiontempx
         leader_position_ycor = positiontempy
+
+    if lisan_al_gaib.xcor() >= 290:
+        running  = False
+    if lisan_al_gaib.xcor() <= -290:
+        running  = False
+    if lisan_al_gaib.ycor() >= 290:
+        running  = False
+    if lisan_al_gaib.ycor() <= -290:
+        running  = False
 
     screen.update()
     sleep(0.1)
