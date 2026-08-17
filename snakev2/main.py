@@ -11,6 +11,12 @@ list = []
 
 lisan_al_gaib = Snake()
 lisan_al_gaib.color("green")
+busted = Turtle()
+busted.ht()
+busted.penup()
+busted.color("white")
+scoreturtle = Turtle(visible=False)
+score = 0
 
 apple = Turtle()
 apple.teleport(randint(-250,250),randint(-250,250))
@@ -31,27 +37,36 @@ def up():
         lisan_al_gaib.setheading(90)
     else:
         pass
+    
 def down():
     if lisan_al_gaib.heading() != 90.00:
         lisan_al_gaib.setheading(270)
     else:
         pass
+
 def left():
     if lisan_al_gaib.heading() != 0.00:
         lisan_al_gaib.setheading(180)
     else:
         pass
+
 def right():
     if lisan_al_gaib.heading() != 180.00:
         lisan_al_gaib.setheading(0)
     else:
         pass
 
-
+speed = 0.1
 
 screen.listen()
 screen.tracer(0)
 while running:
+    if score == 10:
+        speed = 0.08
+    if score == 20:
+        speed = 0.05
+    if score == 30:
+        speed = 0.03
     screen.onkey(up, "Up")
     screen.onkey(down, "Down")
     screen.onkey(left, "Left")
@@ -62,6 +77,7 @@ while running:
     lisan_al_gaib.fd(20)
     if lisan_al_gaib.distance(apple) <= 20:
         apple.teleport(randint(-250,250),randint(-250,250))
+        score += 1
         body = Snake()
         list.append(body)
     for i in list[1:]:
@@ -76,15 +92,23 @@ while running:
 
     if lisan_al_gaib.xcor() >= 290:
         running  = False
+        busted.write("Game Over", False,"center", ("courier", 20, "normal"))
     if lisan_al_gaib.xcor() <= -290:
         running  = False
+        busted.write("Game Over", False,"center", ("courier", 20, "normal"))
     if lisan_al_gaib.ycor() >= 290:
         running  = False
+        busted.write("Game Over", False,"center", ("courier", 20, "normal"))
     if lisan_al_gaib.ycor() <= -290:
         running  = False
-
+        busted.write("Game Over", False,"center", ("courier", 20, "normal"))
+    scoreturtle.reset()
+    scoreturtle.ht()
+    scoreturtle.color("white")
+    scoreturtle.teleport(0,260)
+    scoreturtle.write(f"score = {str(score)}", False, "center", ("courier", 20, "normal"))
     screen.update()
-    sleep(0.1)
+    sleep(speed)
 
 
 
