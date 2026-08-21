@@ -3,6 +3,8 @@ from snake import Snake
 from time import sleep
 from random import randint
 
+
+
 screen = Screen()
 screen.setup(600, 600)
 screen.bgcolor("black")
@@ -22,6 +24,10 @@ busted.color("white")
 
 """turtle who will write the score on the screen"""
 scoreturtle = Turtle(visible=False)
+highscoreturtle = Turtle(visible=False)
+highscoreturtle.color("white")
+highscoreturtle.penup()
+highscoreturtle.teleport(0,260)
 
 """initial score"""
 score = 0
@@ -77,6 +83,17 @@ speed = 0.1
 screen.listen()
 screen.tracer(0)
 
+def reading():
+    with open("highscore.txt", "r") as file1:
+        content = file1.read()
+        return int(content)
+
+def writing(towrite):
+    with open("highscore.txt", "w") as file2:
+        file2.write(str(towrite))
+
+
+
 """function which resets the game when pressed r"""
 
 def restart():
@@ -98,12 +115,16 @@ def restart():
     busted.ht()
     busted.penup()
     busted.color("white")
-
+def quit():
+    global running
+    running = False
 
 screen.onkey(up, "Up")
 screen.onkey(down, "Down")
 screen.onkey(left, "Left")
 screen.onkey(right, "Right")
+screen.onkey(quit, "q")
+
 
 
 while running:
@@ -140,45 +161,56 @@ while running:
 
     if lisan_al_gaib.xcor() >= 290:
         busted.write("Game Over", False, "center", ("courier", 20, "normal"))
+
+        restart()
+
         screen.update()
         sleep(1)
-        restart()
 
 
 
     if lisan_al_gaib.xcor() <= -290:
         busted.write("Game Over", False, "center", ("courier", 20, "normal"))
-        screen.update()
-        sleep(1)
+
         restart()
 
+        screen.update()
+        sleep(1)
 
 
     if lisan_al_gaib.ycor() >= 290:
 
         busted.write("Game Over", False, "center", ("courier", 20, "normal"))
+
+        restart()
+
+
         screen.update()
         sleep(1)
-        restart()
 
 
     if lisan_al_gaib.ycor() <= -290:
         busted.write("Game Over", False, "center", ("courier", 20, "normal"))
-        screen.update()
-        sleep(1)
+
         restart()
 
-
+        screen.update()
+        sleep(1)
 
     scoreturtle.reset()
     scoreturtle.ht()
     scoreturtle.color("white")
-    scoreturtle.teleport(0,260)
-    scoreturtle.write(f"score = {str(score)}", False, "center", ("courier", 20, "normal"))
+    scoreturtle.teleport(20,260)
+    scoreturtle.write(f"score = {str(score)}", False, "left", ("courier", 20, "normal"))
+    highscore = reading()
+    if score > highscore:
+        writing(score)
+    highscoreturtle.reset()
+    highscoreturtle.ht()
+    highscoreturtle.color("white")
+    highscoreturtle.penup()
+    highscoreturtle.teleport(0, 260)
+    highscoreturtle.write(f"high score = {highscore}", False, "right", ("courier", 20, "normal"))
     screen.update()
     sleep(speed)
 
-
-
-
-screen.exitonclick()
